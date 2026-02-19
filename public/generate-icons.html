@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Generate Icons</title>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <script>
+    const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    
+    sizes.forEach(size => {
+      canvas.width = size;
+      canvas.height = size;
+      
+      // Gradient background
+      const gradient = ctx.createLinearGradient(0, 0, size, size);
+      gradient.addColorStop(0, '#00f5ff');
+      gradient.addColorStop(1, '#3b82f6');
+      
+      // Rounded rect
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.roundRect(0, 0, size, size, size * 0.25);
+      ctx.fill();
+      
+      // Text
+      ctx.fillStyle = '#0a0a0a';
+      ctx.font = `bold ${size * 0.55}px system-ui, -apple-system, sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('Æ', size / 2, size / 2 + size * 0.05);
+      
+      // Download
+      const link = document.createElement('a');
+      link.download = `icon-${size}x${size}.png`;
+      link.href = canvas.toDataURL();
+      link.click();
+    });
+    
+    console.log('Icons generated!');
+  </script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+{
+  "name": "Aether — Mission Control",
+  "short_name": "Aether",
+  "description": "Self-hosted OpenClaw dashboard with iOS Liquid Glass design",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='48' fill='%2300f5ff'/%3E%3Ctext x='96' y='130' font-family='system-ui' font-size='100' font-weight='bold' text-anchor='middle' fill='%230a0a0a'%3E%C3%86%3C/text%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='128' fill='%2300f5ff'/%3E%3Ctext x='256' y='360' font-family='system-ui' font-size='280' font-weight='bold' text-anchor='middle' fill='%230a0a0a'%3E%C3%86%3C/text%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ],
+  "categories": ["productivity", "developer tools", "utilities"],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "View dashboard",
+      "url": "/dashboard"
+    },
+    {
+      "name": "Agents",
+      "short_name": "Agents",
+      "description": "View active agents",
+      "url": "/agents"
+    },
+    {
+      "name": "Board",
+      "short_name": "Board",
+      "description": "Open task board",
+      "url": "/"
+    }
+  ],
+  "prefer_related_applications": false
+}
