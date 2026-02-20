@@ -13,7 +13,7 @@ import {
 import { useState } from 'react';
 
 const navItems = [
-  { id: 'dashboard', icon: LayoutDashboard, label: 'Dashboard', href: '/dashboard' },
+  { id: 'dashboard', icon: LayoutDashboard, label: 'Home', href: '/dashboard' },
   { id: 'board', icon: Sparkles, label: 'Board', href: '/' },
   { id: 'agents', icon: Users, label: 'Agents', href: '/agents' },
   { id: 'calendar', icon: Calendar, label: 'Calendar', href: '/calendar' },
@@ -25,7 +25,6 @@ interface MobileNavProps {
 
 export function MobileNav({ onMenuClick }: MobileNavProps) {
   const pathname = usePathname();
-  const [activeTab, setActiveTab] = useState(pathname);
 
   return (
     <nav className="mobile-nav">
@@ -38,22 +37,21 @@ export function MobileNav({ onMenuClick }: MobileNavProps) {
             key={item.id} 
             href={item.href}
             className={`mobile-nav-item ${isActive ? 'active' : ''}`}
-            onClick={() => setActiveTab(item.href)}
           >
             <motion.div
               whileTap={{ scale: 0.9 }}
-              className="flex flex-col items-center gap-1"
+              className="flex flex-col items-center justify-center gap-1 w-full h-full"
             >
-              <div className={`p-2 rounded-xl transition-colors ${isActive ? 'bg-[var(--accent-soft)]' : ''}`}>
-                <Icon className={`w-5 h-5 ${isActive ? 'text-[var(--accent)]' : 'text-white/50'}`} />
+              <div className={`p-2.5 rounded-2xl transition-colors ${isActive ? 'bg-[var(--accent-soft)]' : ''}`}>
+                <Icon className={`w-6 h-6 ${isActive ? 'text-[var(--accent)]' : 'text-white/50'}`} />
               </div>
-              <span className={`text-[10px] font-medium ${isActive ? 'text-[var(--accent)]' : 'text-white/40'}`}>
+              <span className={`text-xs font-medium ${isActive ? 'text-[var(--accent)]' : 'text-white/50'}`}>
                 {item.label}
               </span>
               {isActive && (
                 <motion.div
                   layoutId="mobileActiveIndicator"
-                  className="absolute -top-1 w-1 h-1 rounded-full bg-[var(--accent)]"
+                  className="absolute top-1 w-1 h-1 rounded-full bg-[var(--accent)]"
                 />
               )}
             </motion.div>
@@ -68,12 +66,12 @@ export function MobileNav({ onMenuClick }: MobileNavProps) {
       >
         <motion.div
           whileTap={{ scale: 0.9 }}
-          className="flex flex-col items-center gap-1"
+          className="flex flex-col items-center justify-center gap-1 w-full h-full"
         >
-          <div className="p-2 rounded-xl">
-            <Menu className="w-5 h-5 text-white/50" />
+          <div className="p-2.5 rounded-2xl">
+            <Menu className="w-6 h-6 text-white/50" />
           </div>
-          <span className="text-[10px] font-medium text-white/40">Menu</span>
+          <span className="text-xs font-medium text-white/50">Menu</span>
         </motion.div>
       </button>
     </nav>
