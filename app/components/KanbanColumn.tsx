@@ -13,6 +13,7 @@ interface KanbanColumnProps {
   color: string;
   tasks: Task[];
   onlineAgents?: Set<string>;
+  onTaskClick?: (task: Task) => void;
 }
 
 const agentMap: Record<string, { name: string; id: string }> = {
@@ -23,7 +24,7 @@ const agentMap: Record<string, { name: string; id: string }> = {
   monitor: { name: 'Victor', id: 'monitor' },
 };
 
-export function KanbanColumn({ id, title, color, tasks, onlineAgents = new Set() }: KanbanColumnProps) {
+export function KanbanColumn({ id, title, color, tasks, onlineAgents = new Set(), onTaskClick }: KanbanColumnProps) {
   const { setNodeRef, isOver } = useDroppable({ id });
 
   return (
@@ -57,7 +58,10 @@ export function KanbanColumn({ id, title, color, tasks, onlineAgents = new Set()
             
             return (
               <div key={task.id} className="space-y-2">
-                <KanbanCard task={task} />
+                <KanbanCard 
+                  task={task} 
+                  onClick={() => onTaskClick?.(task)}
+                />
                 {needsSpawn && task.assignedAgentId && agentMap[task.assignedAgentId] && (
                   <SpawnAgentButton
                     agentId={agentMap[task.assignedAgentId].id}

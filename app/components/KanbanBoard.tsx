@@ -6,6 +6,7 @@ import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { KanbanColumn } from './KanbanColumn';
 import { KanbanCard } from './KanbanCard';
 import { Task, mockTasks } from '@/app/data/tasks';
+import { TaskDetailModal } from './TaskDetailModal';
 import { SpawnAgentButton } from './SpawnAgentButton';
 import { Plus, RefreshCw } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -30,6 +31,7 @@ const agentMap: Record<string, { name: string; id: string }> = {
 export function KanbanBoard() {
   const [tasks, setTasks] = useState<Task[]>(mockTasks);
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const { data: openClawData, refresh } = useOpenClaw(5000);
   
   const onlineAgents = new Set<string>(
@@ -97,6 +99,14 @@ export function KanbanBoard() {
     setTasks([...tasks, newTask]);
   };
 
+  const handleUpdateTask = (updatedTask: Task) => {
+    setTasks(tasks.map(t => t.id === updatedTask.id ? updatedTask : t));
+  };
+
+  const handleDeleteTask = (taskId: string) => {
+    setTasks(tasks.filter(t => t.id !== taskId));
+  };
+
   const activeTask = tasks.find(t => t.id === activeId);
   
   // Find tasks that need spawning
@@ -159,6 +169,7 @@ export function KanbanBoard() {
                 color={column.color}
                 tasks={tasks.filter(t => t.status === column.id)}
                 onlineAgents={onlineAgents}
+                onTaskClick={setSelectedTask}
               />
             ))}
           </div>
@@ -170,6 +181,15 @@ export function KanbanBoard() {
           ) : null}
         </DragOverlay>
       </DndContext>
+
+      {/* Task Detail Modal */}
+      <TaskDetailModal
+        task={selectedTask}
+        isOpen={!!selectedTask}
+        onClose={() => setSelectedTask(null)}
+        onUpdate={handleUpdateTask}
+        onDelete={handleDeleteTask}
+      />
     </div>
   );
 }

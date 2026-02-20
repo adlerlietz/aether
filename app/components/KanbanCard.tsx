@@ -3,11 +3,13 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Task } from '@/app/data/tasks';
-import { Calendar, GripVertical } from 'lucide-react';
+import { Calendar, GripVertical, StickyNote } from 'lucide-react';
+import { useTaskNotes } from '@/app/hooks/useTaskNotes';
 
 interface KanbanCardProps {
   task: Task;
   isDragging?: boolean;
+  onClick?: () => void;
 }
 
 const agentEmojis: Record<string, string> = {
@@ -24,7 +26,7 @@ const priorityColors = {
   high: 'bg-red-500/20 text-red-400 border-red-500/30',
 };
 
-export function KanbanCard({ task, isDragging }: KanbanCardProps) {
+export function KanbanCard({ task, isDragging, onClick }: KanbanCardProps) {
   const {
     attributes,
     listeners,
@@ -33,6 +35,8 @@ export function KanbanCard({ task, isDragging }: KanbanCardProps) {
     transition,
     isDragging: isSorting,
   } = useSortable({ id: task.id });
+  
+  const { hasNote } = useTaskNotes(task.id);
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -46,12 +50,18 @@ export function KanbanCard({ task, isDragging }: KanbanCardProps) {
       style={style}
       {...attributes}
       {...listeners}
+      onClick={onClick}
       className="glass p-3 cursor-grab active:cursor-grabbing hover:bg-white/10 transition-colors group"
     >
       <div className="flex items-start gap-2">
         <GripVertical className="w-4 h-4 text-white/20 mt-0.5 opacity-0 group-hover:opacity-100 transition-opacity" />
         <div className="flex-1 min-w-0">
-          <h4 className="text-sm font-medium text-white/90 truncate">{task.title}</h4>
+          <div className="flex items-start justify-between gap-2">
+            <h4 className="text-sm font-medium text-white/90 truncate">{task.title}</h4>
+            {hasNote && (
+              <StickyNote className="w-3.5 h-3.5 text-[var(--accent)] flex-shrink-0" />
+            )}
+          </div>
           
           {task.description && (
             <p className="text-xs text-white/50 mt-1 line-clamp-2">{task.description}</p>
