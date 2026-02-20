@@ -32,7 +32,7 @@ export function KanbanBoard() {
   const [activeId, setActiveId] = useState<string | null>(null);
   const { data: openClawData, refresh } = useOpenClaw(5000);
   
-  const onlineAgents = new Set(
+  const onlineAgents = new Set<string>(
     openClawData?.sessions?.map(s => {
       if (s.key.includes('main') && !s.key.includes('cron')) return 'main';
       if (s.key.includes('coder')) return 'coder';
@@ -40,7 +40,7 @@ export function KanbanBoard() {
       if (s.key.includes('planner')) return 'planner';
       if (s.key.includes('cron')) return 'monitor';
       return null;
-    }).filter(Boolean) || []
+    }).filter((id): id is string => id !== null) || []
   );
 
   const sensors = useSensors(
