@@ -27,24 +27,35 @@ interface AgentCardProps {
   index: number;
 }
 
-const agentEmojis: Record<string, string> = {
+const agentRoster: Record<string, { emoji: string; name: string }> = {
+  'main':       { emoji: '🦞', name: 'Molt' },
+  'coder':      { emoji: '⚡', name: 'ClodBot' },
+  'researcher': { emoji: '🔍', name: 'DeepDive' },
+  'planner':    { emoji: '📐', name: 'Kimi' },
+  'monitor':    { emoji: '👁️', name: 'CronMaster' },
+};
+
+const channelEmojis: Record<string, string> = {
   'telegram': '📱',
   'cron': '⏰',
-  'main': '🧠',
-  'default': '🤖',
 };
 
 function getAgentEmoji(key: string): string {
-  if (key.includes('telegram')) return agentEmojis.telegram;
-  if (key.includes('cron')) return agentEmojis.cron;
-  if (key.includes('main')) return agentEmojis.main;
-  return agentEmojis.default;
+  for (const [id, agent] of Object.entries(agentRoster)) {
+    if (key.includes(id)) return agent.emoji;
+  }
+  for (const [channel, emoji] of Object.entries(channelEmojis)) {
+    if (key.includes(channel)) return emoji;
+  }
+  return '🤖';
 }
 
 function getAgentName(key: string): string {
+  for (const [id, agent] of Object.entries(agentRoster)) {
+    if (key.includes(id)) return agent.name;
+  }
   if (key.includes('telegram')) return 'Telegram Agent';
   if (key.includes('cron')) return 'Cron Agent';
-  if (key.includes('main')) return 'Main Agent';
   return 'Agent';
 }
 
