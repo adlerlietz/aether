@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { 
   GitBranch, 
@@ -289,12 +290,13 @@ export function AgentGrid() {
       {/* Agent Grid - Full Roster */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         {SWARM_ROSTER.map((agent, index) => (
-          <AgentCard 
-            key={agent.id} 
-            agent={agent} 
-            session={getSessionForAgent(agent.id, sessions)}
-            index={index} 
-          />
+          <Link key={agent.id} href={`/agents/${agent.id}`} className="block">
+            <AgentCard 
+              agent={agent} 
+              session={getSessionForAgent(agent.id, sessions)}
+              index={index} 
+            />
+          </Link>
         ))}
       </div>
 
