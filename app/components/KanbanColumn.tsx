@@ -4,6 +4,7 @@ import { useDroppable } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { Task } from '@/app/data/tasks';
 import { KanbanCard } from './KanbanCard';
+import { SpawnAgentButton } from './SpawnAgentButton';
 import { Plus } from 'lucide-react';
 
 interface KanbanColumnProps {
@@ -11,12 +12,19 @@ interface KanbanColumnProps {
   title: string;
   color: string;
   tasks: Task[];
+  onlineAgents?: Set<string>;
 }
 
-export function KanbanColumn({ id, title, color, tasks }: KanbanColumnProps) {
-  const { setNodeRef, isOver } = useDroppable({
-    id,
-  });
+const agentMap: Record<string, { name: string; id: string }> = {
+  main: { name: 'Charles', id: 'main' },
+  coder: { name: 'Dexter', id: 'coder' },
+  researcher: { name: 'Oliver', id: 'researcher' },
+  planner: { name: 'Henry', id: 'planner' },
+  monitor: { name: 'Victor', id: 'monitor' },
+};
+
+export function KanbanColumn({ id, title, color, tasks, onlineAgents = new Set() }: KanbanColumnProps) {
+  const { setNodeRef, isOver } = useDroppable({ id });
 
   return (
     <div
@@ -42,9 +50,24 @@ export function KanbanColumn({ id, title, color, tasks }: KanbanColumnProps) {
           items={tasks.map(t => t.id)}
           strategy={verticalListSortingStrategy}
         >
-          {tasks.map(task => (
-            <KanbanCard key={task.id} task={task} />
-          ))}
+          {tasks.map(task => {
+            const needsSpawn = id === 'assigned' && 
+              task.assignedAgentId && 
+              !onlineAgents.has(task.assignedAgentId);
+            
+            return (
+              <div key={task.id} className="space-y-2">
+                <KanbanCard task={task} />
+                {needsSpawn && task.assignedAgentId && agentMap[task.assignedAgentId] && (
+                  <SpawnAgentButton
+                    agentId={agentMap[task.assignedAgentId].id}
+                    agentName={agentMap[task.assignedAgentId].name}
+                    size="sm"
+                  />
+                )}
+              </div>
+            );
+          })}
         </SortableContext>
         
         {tasks.length === 0 && (
