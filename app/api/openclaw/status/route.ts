@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+
 // For Vercel: use ngrok/Tailscale URL. For local dev: use localhost.
 const OPENCLAW_URL = process.env.OPENCLAW_GATEWAY_URL || 'http://127.0.0.1:18789';
 const OPENCLAW_TOKEN = process.env.OPENCLAW_TOKEN;
@@ -75,7 +77,8 @@ export async function GET() {
           : 0;
         return {
           key: s.key,
-          kind: s.kind || s.label || 'session',
+          kind: s.kind || 'session',
+          label: s.label,
           age: formatAge(Date.now() - s.updatedAt),
           model: s.model || 'unknown',
           tokens: `${(s.totalTokens / 1000).toFixed(1)}k/${(s.contextTokens / 1000).toFixed(0)}k (${pct.toFixed(0)}%)`,

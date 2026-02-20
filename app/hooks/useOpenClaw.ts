@@ -95,8 +95,17 @@ export function parseTokenUsage(tokenStr: string): { used: number; total: number
 
 // Get active model from session key
 export function getModelName(model: string): string {
+  if (!model) return 'Unknown';
   const parts = model.split('/');
-  return parts[parts.length - 1] || model;
+  const name = parts[parts.length - 1] || model;
+  // Clean up common model names
+  const aliases: Record<string, string> = {
+    'kimi-k2.5': 'Kimi K2.5',
+    'gemini-2.5-flash': 'Gemini Flash',
+    'deepseek-chat-v3-0324': 'DeepSeek Chat',
+    'qwen3:4b': 'Qwen 3 4B',
+  };
+  return aliases[name] || name;
 }
 
 // Calculate estimated cost based on tokens
