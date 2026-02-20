@@ -10,6 +10,7 @@ interface KanbanCardProps {
   task: Task;
   isDragging?: boolean;
   onClick?: () => void;
+  onOpenNotes?: (taskId: string) => void;
 }
 
 const agentEmojis: Record<string, string> = {
@@ -26,7 +27,7 @@ const priorityColors = {
   high: 'bg-red-500/20 text-red-400 border-red-500/30',
 };
 
-export function KanbanCard({ task, isDragging, onClick }: KanbanCardProps) {
+export function KanbanCard({ task, isDragging, onClick, onOpenNotes }: KanbanCardProps) {
   const {
     attributes,
     listeners,
@@ -59,7 +60,15 @@ export function KanbanCard({ task, isDragging, onClick }: KanbanCardProps) {
           <div className="flex items-start justify-between gap-2">
             <h4 className="text-sm font-medium text-white/90 truncate">{task.title}</h4>
             {hasNote && (
-              <StickyNote className="w-3.5 h-3.5 text-[var(--accent)] flex-shrink-0" />
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onOpenNotes?.(task.id);
+                }}
+                className="text-[var(--accent)] flex-shrink-0 hover:text-white transition-colors"
+              >
+                <StickyNote className="w-3.5 h-3.5" />
+              </button>
             )}
           </div>
           

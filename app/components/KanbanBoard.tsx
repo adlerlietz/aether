@@ -7,6 +7,7 @@ import { KanbanColumn } from './KanbanColumn';
 import { KanbanCard } from './KanbanCard';
 import { Task, mockTasks } from '@/app/data/tasks';
 import { TaskDetailModal } from './TaskDetailModal';
+import { TaskNotesModal } from './TaskNotesModal';
 import { SpawnAgentButton } from './SpawnAgentButton';
 import { Plus, RefreshCw } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -32,6 +33,7 @@ export function KanbanBoard() {
   const [tasks, setTasks] = useState<Task[]>(mockTasks);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+  const [activeTaskIdForNotes, setActiveTaskIdForNotes] = useState<string | null>(null);
   const { data: openClawData, refresh } = useOpenClaw(5000);
   
   const onlineAgents = new Set<string>(
@@ -170,6 +172,7 @@ export function KanbanBoard() {
                 tasks={tasks.filter(t => t.status === column.id)}
                 onlineAgents={onlineAgents}
                 onTaskClick={setSelectedTask}
+                onOpenNotes={setActiveTaskIdForNotes}
               />
             ))}
           </div>
@@ -189,6 +192,13 @@ export function KanbanBoard() {
         onClose={() => setSelectedTask(null)}
         onUpdate={handleUpdateTask}
         onDelete={handleDeleteTask}
+      />
+      
+      {/* Task Notes Modal */}
+      <TaskNotesModal
+        taskId={activeTaskIdForNotes}
+        isOpen={!!activeTaskIdForNotes}
+        onClose={() => setActiveTaskIdForNotes(null)}
       />
     </div>
   );
